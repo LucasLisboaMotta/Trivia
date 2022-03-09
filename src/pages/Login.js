@@ -50,7 +50,7 @@ class Login extends Component {
           onClick={ () => {
             addUserInfo({ ...this.state });
             getTokenDispatch();
-            history.push();
+            history.push('/game');
           } }
         >
           Play
