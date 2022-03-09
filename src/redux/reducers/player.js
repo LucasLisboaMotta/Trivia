@@ -1,4 +1,4 @@
-import { GET_USER_INFO } from '../actions/action';
+import { GET_TOKEN, GET_USER_INFO } from '../actions/action';
 
 const INITIAL_STATE = {
   name: '',
@@ -13,9 +13,11 @@ function player(state = INITIAL_STATE, { type, payload }) {
   case GET_USER_INFO:
     return {
       ...state,
-      name: payload.name,
-      gravatarEmail: payload.gravatarEmail,
+      ...payload,
     };
+  case GET_TOKEN:
+    localStorage.setItem('token', payload);
+    return state;
   default:
     return state;
   }

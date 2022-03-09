@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getUserInfo } from '../redux/actions/action';
+import { fetchToken, getUserInfo } from '../redux/actions/action';
 
 class Login extends Component {
   state = {
@@ -18,7 +18,7 @@ class Login extends Component {
   }
 
   render() {
-    const { history, addUserInfo } = this.props;
+    const { history, addUserInfo, getTokenDispatch } = this.props;
     const { gravatarEmail, name } = this.state;
     return (
       <div>
@@ -49,6 +49,7 @@ class Login extends Component {
           disabled={ this.isDisabled(gravatarEmail, name) }
           onClick={ () => {
             addUserInfo({ ...this.state });
+            getTokenDispatch();
             history.push();
           } }
         >
@@ -61,6 +62,7 @@ class Login extends Component {
 
 Login.propTypes = {
   addUserInfo: PropTypes.func.isRequired,
+  getTokenDispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
@@ -68,6 +70,7 @@ Login.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   addUserInfo: (value) => dispatch(getUserInfo(value)),
+  getTokenDispatch: (token) => dispatch(fetchToken(token)),
 });
 
 export default connect(null, mapDispatchToProps)(Login);
