@@ -10,6 +10,8 @@ const store = createStore(
   ),
 );
 
+// Laço Condicional para Cypress:
+
 if (window.Cypress) {
   window.store = store;
 }
