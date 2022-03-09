@@ -13,9 +13,9 @@ function player(state = INITIAL_STATE, { type, payload }) {
   case GET_USER_INFO:
     return {
       ...state,
-      name: payload.name,
-      gravatarEmail: payload.gravatarEmail,
+      ...payload,
     };
+
   default:
     return state;
   }
