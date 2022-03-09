@@ -1,10 +1,10 @@
 import { GET_USER_INFO } from '../actions/action';
 
 const INITIAL_STATE = {
-  name: '',
+  name: 'Player',
   assertions: 0,
   score: 0,
-  gravatarEmail: '',
+  gravatarEmail: 'https://www.gravatar.com/avatar/5fe9e51e59db5ce1541c1902a9ee0ec3',
   isLogged: false,
 };
 
