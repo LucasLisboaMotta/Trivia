@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import Login from './pages/Login';
 import Header from './components/Header';
+import Settings from './pages/Settings';
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
       <Header />
       <Switch>
         <Route exact path="/" component={ Login } />
+        <Route path="/settings" component={ Settings } />
       </Switch>
     </div>
   );
