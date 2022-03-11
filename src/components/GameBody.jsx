@@ -8,13 +8,13 @@ class GameBody extends Component {
   state = {
     answer: 0,
     disableQuestButton: false,
-    disableNextButton: true,
   }
 
   onClickAnswer = (answerClick) => {
     const { dispatch } = this.props;
     if (answerClick === 'correct-answer') dispatch(correctAnswer());
-    this.setState({ disableNextButton: false, disableQuestButton: true });
+    this.setState({ disableQuestButton: true });
+
     const correct = document.querySelector('.correct');
     const incorrect = document.querySelectorAll('.wrong');
     correct.className = 'correct-click';
@@ -28,15 +28,21 @@ class GameBody extends Component {
     const LAST_QUESTION = 4;
     const { answer } = this.state;
     if (answer === LAST_QUESTION) history.push('/feedback');
-    else {
-      this.setState({ answer: answer + 1,
-        disableQuestButton: false,
-        disableNextButton: true });
-    }
+    else this.setState({ answer: answer + 1, disableQuestButton: false });
   }
 
+  nextButton = () => (
+    <button
+      type="button"
+      data-testid="btn-next"
+      onClick={ this.onClickNext }
+    >
+      Next
+    </button>
+  )
+
   render() {
-    const { answer, disableNextButton, disableQuestButton } = this.state;
+    const { answer, disableQuestButton } = this.state;
     const { questions } = this.props;
     const { category, question, type, correct_answer: corrAnswer,
       incorrect_answers: incorrectAnswers } = questions[answer];
@@ -66,13 +72,7 @@ class GameBody extends Component {
               {currentQuestion}
             </button>))}
         </div>
-        <button
-          type="button"
-          disabled={ disableNextButton }
-          onClick={ this.onClickNext }
-        >
-          Next
-        </button>
+        {disableQuestButton && this.nextButton() }
       </div>
     );
   }

@@ -11,7 +11,7 @@ class FeedBack extends Component {
         <h1 data-testid="feedback-text">
           { assertions < MINIMUM_ASSERTIONS
             ? 'Could be better...'
-            : 'Could be better...'}
+            : 'Well Done!'}
         </h1>
         <p>
           You got
