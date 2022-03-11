@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { correctAnswer } from '../redux/actions/action';
 import randomQuestion from '../helper/randomQuestion';
+import { setLocalStorage } from '../helper/localStorageHelper';
 
 class GameBody extends Component {
   state = {
@@ -24,10 +25,29 @@ class GameBody extends Component {
   }
 
   onClickAnswer = (answerClick) => {
-    const { intervalo } = this.state;
+    const { intervalo, answer, timer } = this.state;
     clearInterval(intervalo);
-    const { dispatch } = this.props;
-    if (answerClick === 'correct-answer') dispatch(correctAnswer());
+    const { dispatch, questions } = this.props;
+    if (answerClick === 'correct-answer') {
+      let difficultyBonus;
+      const MAXIMUS_BONUS = 3;
+      switch (questions[answer].difficulty) {
+      case 'easy':
+        difficultyBonus = 1;
+        break;
+      case 'medium':
+        difficultyBonus = 2;
+        break;
+      case 'hard':
+        difficultyBonus = MAXIMUS_BONUS;
+        break;
+      default:
+        break;
+      }
+      const MINIMUM_SCORE = 10;
+      const score = MINIMUM_SCORE + (difficultyBonus * timer);
+      dispatch(correctAnswer(score));
+    }
     this.setState({ disableQuestButton: true });
 
     const correct = document.querySelector('.correct');
@@ -42,8 +62,11 @@ class GameBody extends Component {
     const { history } = this.props;
     const LAST_QUESTION = 4;
     const { answer } = this.state;
-    if (answer === LAST_QUESTION) history.push('/feedback');
-    else {
+    if (answer === LAST_QUESTION) {
+      const { score, name, gravatarEmail } = this.props;
+      setLocalStorage({ score, name, gravatarEmail });
+      history.push('/feedback');
+    } else {
       this.countDown();
       this.setState({ answer: answer + 1, disableQuestButton: false, timer: 30 });
     }
@@ -120,6 +143,15 @@ GameBody.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  name: PropTypes.string.isRequired,
+  gravatarEmail: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
 };
 
-export default connect()(GameBody);
+const mapStateToProps = ({ player }) => ({
+  name: player.name,
+  score: player.score,
+  gravatarEmail: player.gravatarEmail,
+});
+
+export default connect(mapStateToProps)(GameBody);
