@@ -7,19 +7,36 @@ import randomQuestion from '../helper/randomQuestion';
 class GameBody extends Component {
   state = {
     answer: 0,
+    disableQuestButton: false,
+    disableNextButton: true,
   }
 
   onClickAnswer = (answerClick) => {
-    const { history, dispatch } = this.props;
+    const { dispatch } = this.props;
     if (answerClick === 'correct-answer') dispatch(correctAnswer());
+    this.setState({ disableNextButton: false, disableQuestButton: true });
+    const correct = document.querySelector('.correct');
+    const incorrect = document.querySelectorAll('.wrong');
+    correct.className = 'correct-click';
+    incorrect.forEach((element) => {
+      element.className = 'wrong-click';
+    });
+  }
+
+  onClickNext = () => {
+    const { history } = this.props;
     const LAST_QUESTION = 4;
     const { answer } = this.state;
     if (answer === LAST_QUESTION) history.push('/feedback');
-    else this.setState({ answer: answer + 1 });
+    else {
+      this.setState({ answer: answer + 1,
+        disableQuestButton: false,
+        disableNextButton: true });
+    }
   }
 
   render() {
-    const { answer } = this.state;
+    const { answer, disableNextButton, disableQuestButton } = this.state;
     const { questions } = this.props;
     const { category, question, type, correct_answer: corrAnswer,
       incorrect_answers: incorrectAnswers } = questions[answer];
@@ -39,15 +56,23 @@ class GameBody extends Component {
         <div data-testid="answer-options">
           {randomAnswer.map(([currentQuestion, testId]) => (
             <button
-              id={ testId }
+              className={ testId.split('-')[0] }
               key={ currentQuestion }
               type="button"
               onClick={ () => this.onClickAnswer(testId) }
               data-testid={ testId }
+              disabled={ disableQuestButton }
             >
               {currentQuestion}
             </button>))}
         </div>
+        <button
+          type="button"
+          disabled={ disableNextButton }
+          onClick={ this.onClickNext }
+        >
+          Next
+        </button>
       </div>
     );
   }

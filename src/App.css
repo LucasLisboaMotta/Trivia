@@ -7,6 +7,15 @@
   pointer-events: none;
 }
 
+.correct-click {
+  border: 3px solid rgb(6, 240, 15);
+}
+
+.wrong-click {
+  border: 3px solid red;
+}
+
+
 .red-border {
   border: 1px solid red;
 }
