@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 class FeedBack extends Component {
   render() {
-    const { assertions, score } = this.props;
+    const { assertions, score, history } = this.props;
     const MINIMUM_ASSERTIONS = 3;
     return (
       <div>
@@ -27,7 +27,26 @@ class FeedBack extends Component {
           {' '}
           points
         </p>
-        <p />
+
+        <div>
+
+          <button
+            type="button"
+            data-testid="btn-play-again"
+            onClick={ () => history.push('/') }
+          >
+            Play again
+          </button>
+
+          <button
+            type="button"
+            data-testid="btn-ranking"
+            onClick={ () => history.push('/ranking') }
+          >
+            Ranking
+          </button>
+        </div>
+
       </div>
     );
   }
@@ -41,6 +60,9 @@ const mapStateToProps = ({ player }) => ({
 FeedBack.propTypes = {
   assertions: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default connect(mapStateToProps)(FeedBack);
