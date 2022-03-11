@@ -8,6 +8,24 @@ class GameBody extends Component {
   state = {
     answer: 0,
     disableQuestButton: false,
+    timer: 30,
+  }
+
+  componentDidMount = () => {
+    this.countDown();
+  }
+
+  countDown = () => {
+    const INTERVAL_TIME = 1000;
+    setInterval(() => {
+      this.setState((prevState) => {
+        if (prevState.timer === 0) {
+          this.onClickAnswer();
+          return { timer: 0 };
+        }
+        return { timer: prevState.timer - 1 };
+      });
+    }, INTERVAL_TIME);
   }
 
   onClickAnswer = (answerClick) => {
@@ -42,13 +60,16 @@ class GameBody extends Component {
   )
 
   render() {
-    const { answer, disableQuestButton } = this.state;
+    const { answer, disableQuestButton, timer } = this.state;
     const { questions } = this.props;
     const { category, question, type, correct_answer: corrAnswer,
       incorrect_answers: incorrectAnswers } = questions[answer];
     const randomAnswer = randomQuestion(type, corrAnswer, incorrectAnswers);
     return (
       <div>
+        <div>
+          <span>{ `${timer} seconds` }</span>
+        </div>
         <h1
           data-testid="question-category"
         >
