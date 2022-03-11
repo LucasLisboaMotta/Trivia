@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchToken, getUserInfo } from '../redux/actions/action';
+import { getUserInfo, getToken } from '../redux/actions/action';
 
 class Login extends Component {
   state = {
@@ -17,8 +17,17 @@ class Login extends Component {
     } return false;
   }
 
-  render() {
+  onClickButton = async () => {
     const { history, addUserInfo, getTokenDispatch } = this.props;
+    const fToken = await fetch('https://opentdb.com/api_token.php?command=request');
+    const { token } = await fToken.json();
+    getTokenDispatch(token);
+    addUserInfo({ ...this.state });
+    history.push('/game');
+  }
+
+  render() {
+    const { history } = this.props;
     const { gravatarEmail, name } = this.state;
     return (
       <div>
@@ -47,11 +56,7 @@ class Login extends Component {
           data-testid="btn-play"
           type="button"
           disabled={ this.isDisabled(gravatarEmail, name) }
-          onClick={ () => {
-            addUserInfo({ ...this.state });
-            getTokenDispatch();
-            history.push('/game');
-          } }
+          onClick={ this.onClickButton }
         >
           Play
         </button>
@@ -80,7 +85,7 @@ Login.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   addUserInfo: (value) => dispatch(getUserInfo(value)),
-  getTokenDispatch: (token) => dispatch(fetchToken(token)),
+  getTokenDispatch: (token) => dispatch(getToken(token)),
 });
 
 export default connect(null, mapDispatchToProps)(Login);

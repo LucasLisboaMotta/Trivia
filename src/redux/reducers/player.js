@@ -1,4 +1,4 @@
-import { GET_USER_INFO } from '../actions/action';
+import { GET_USER_INFO, CORRECT_ANSWER } from '../actions/action';
 
 const INITIAL_STATE = {
   name: 'Player',
@@ -14,6 +14,12 @@ function player(state = INITIAL_STATE, { type, payload }) {
     return {
       ...state,
       ...payload,
+    };
+
+  case CORRECT_ANSWER:
+    return {
+      ...state,
+      assertions: state.assertions + 1,
     };
 
   default:
