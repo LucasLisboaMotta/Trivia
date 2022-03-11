@@ -46,7 +46,6 @@ class FeedBack extends Component {
             Ranking
           </button>
         </div>
-
       </div>
     );
   }
