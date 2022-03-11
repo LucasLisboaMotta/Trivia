@@ -9,26 +9,23 @@ class GameBody extends Component {
     answer: 0,
     disableQuestButton: false,
     timer: 30,
+    intervalo: '',
+    questionsRandom: [],
   }
 
   componentDidMount = () => {
+    const { questions } = this.props;
+    const questionsRandom = questions.map(({ type,
+      correct_answer: corrAnswer,
+      incorrect_answers: incorrectAnswers,
+    }) => randomQuestion(type, corrAnswer, incorrectAnswers));
+    this.setState({ questionsRandom });
     this.countDown();
   }
 
-  countDown = () => {
-    const INTERVAL_TIME = 1000;
-    setInterval(() => {
-      this.setState((prevState) => {
-        if (prevState.timer === 0) {
-          this.onClickAnswer();
-          return { timer: 0 };
-        }
-        return { timer: prevState.timer - 1 };
-      });
-    }, INTERVAL_TIME);
-  }
-
   onClickAnswer = (answerClick) => {
+    const { intervalo } = this.state;
+    clearInterval(intervalo);
     const { dispatch } = this.props;
     if (answerClick === 'correct-answer') dispatch(correctAnswer());
     this.setState({ disableQuestButton: true });
@@ -46,7 +43,24 @@ class GameBody extends Component {
     const LAST_QUESTION = 4;
     const { answer } = this.state;
     if (answer === LAST_QUESTION) history.push('/feedback');
-    else this.setState({ answer: answer + 1, disableQuestButton: false });
+    else {
+      this.countDown();
+      this.setState({ answer: answer + 1, disableQuestButton: false, timer: 30 });
+    }
+  }
+
+  countDown = () => {
+    const INTERVAL_TIME = 1000;
+    const intervalo = setInterval(() => {
+      this.setState((prevState) => {
+        if (prevState.timer === 0) {
+          this.onClickAnswer();
+          return { timer: 0 };
+        }
+        return { timer: prevState.timer - 1 };
+      });
+    }, INTERVAL_TIME);
+    this.setState({ intervalo });
   }
 
   nextButton = () => (
@@ -60,11 +74,10 @@ class GameBody extends Component {
   )
 
   render() {
-    const { answer, disableQuestButton, timer } = this.state;
+    const { answer, disableQuestButton, timer, questionsRandom } = this.state;
     const { questions } = this.props;
-    const { category, question, type, correct_answer: corrAnswer,
-      incorrect_answers: incorrectAnswers } = questions[answer];
-    const randomAnswer = randomQuestion(type, corrAnswer, incorrectAnswers);
+    const { category, question } = questions[answer];
+    const randomAnswer = questionsRandom[answer];
     return (
       <div>
         <div>
@@ -81,17 +94,19 @@ class GameBody extends Component {
           {question}
         </h2>
         <div data-testid="answer-options">
-          {randomAnswer.map(([currentQuestion, testId]) => (
-            <button
-              className={ testId.split('-')[0] }
-              key={ currentQuestion }
-              type="button"
-              onClick={ () => this.onClickAnswer(testId) }
-              data-testid={ testId }
-              disabled={ disableQuestButton }
-            >
-              {currentQuestion}
-            </button>))}
+          {questionsRandom.length !== 0
+        && randomAnswer.map(([currentQuestion, testId]) => (
+          <button
+            className={ testId.split('-')[0] }
+            key={ currentQuestion }
+            type="button"
+            onClick={ () => this.onClickAnswer(testId) }
+            data-testid={ testId }
+            disabled={ disableQuestButton }
+          >
+            {currentQuestion}
+          </button>))}
+
         </div>
         {disableQuestButton && this.nextButton() }
       </div>
