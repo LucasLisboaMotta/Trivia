@@ -5,7 +5,6 @@ const INITIAL_STATE = {
   assertions: 0,
   score: 0,
   gravatarEmail: 'https://www.gravatar.com/avatar/5fe9e51e59db5ce1541c1902a9ee0ec3',
-  isLogged: false,
 };
 
 function player(state = INITIAL_STATE, { type, payload }) {
@@ -14,12 +13,15 @@ function player(state = INITIAL_STATE, { type, payload }) {
     return {
       ...state,
       ...payload,
+      score: 0,
+      assertions: 0,
     };
 
   case CORRECT_ANSWER:
     return {
       ...state,
       assertions: state.assertions + 1,
+      score: state.score + payload,
     };
 
   default:

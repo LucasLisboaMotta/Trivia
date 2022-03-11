@@ -5,7 +5,7 @@ export const GET_TOKEN = 'GET_TOKEN';
 export const CORRECT_ANSWER = 'CORRECT_ANSWER';
 
 export const getToken = (state) => ({ type: GET_TOKEN, payload: state });
-export const correctAnswer = () => ({ type: CORRECT_ANSWER });
+export const correctAnswer = (score) => ({ type: CORRECT_ANSWER, payload: score });
 
 export const getUserInfo = (state) => {
   const convertHash = md5(state.gravatarEmail).toString();
