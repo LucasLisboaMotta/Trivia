@@ -17,7 +17,6 @@ class GameBody extends Component {
     if (answer === LAST_QUESTION) history.push('/feedback');
     else this.setState({ answer: answer + 1 });
   }
-  // type, correct, wrong
 
   render() {
     const { answer } = this.state;
@@ -29,8 +28,9 @@ class GameBody extends Component {
       <div>
         <h1
           data-testid="question-category"
-          dangerouslySetInnerHTML={ { __html: category } }
-        />
+        >
+          {category}
+        </h1>
         <h2
           data-testid="question-text"
         >
@@ -39,13 +39,13 @@ class GameBody extends Component {
         <div data-testid="answer-options">
           {randomAnswer.map(([currentQuestion, testId]) => (
             <button
+              id={ testId }
               key={ currentQuestion }
               type="button"
               onClick={ () => this.onClickAnswer(testId) }
               data-testid={ testId }
-              dangerouslySetInnerHTML={ { __html: currentQuestion } }
             >
-              {}
+              {currentQuestion}
             </button>))}
         </div>
       </div>
