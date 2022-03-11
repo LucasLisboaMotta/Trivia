@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Header from '../components/Header';
 
 class FeedBack extends Component {
   render() {
@@ -8,6 +9,7 @@ class FeedBack extends Component {
     const MINIMUM_ASSERTIONS = 3;
     return (
       <div>
+        <Header />
         <h1 data-testid="feedback-text">
           { assertions < MINIMUM_ASSERTIONS
             ? 'Could be better...'

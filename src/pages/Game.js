@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import GameBody from '../components/GameBody';
+import Header from '../components/Header';
 
 class Game extends Component {
   state = {
@@ -29,6 +30,7 @@ class Game extends Component {
     const { questions: { length } } = this.state;
     return (
       <div>
+        <Header />
         { length !== 0 && <GameBody { ...this.state } { ...this.props } />}
       </div>
     );
