@@ -1,7 +1,7 @@
 # Trivia
 
 <p> 
-  Um em grupo feito utilizando <b>React Redux</b>, após cinco messes estudando programação.
+  Um projeto feito em grupo utilizando <b>React Redux</b>, após cinco messes estudando programação.
   <br>O objetivo do projeto é fazer um jogo de trivia web utilizando a API do <b>Open Trivia Database</b>
 </p>
 
